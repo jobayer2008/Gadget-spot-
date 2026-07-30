@@ -18,7 +18,6 @@
             background: #f1f5f9;
             color: #0f172a;
             padding-bottom: 85px;
-            /* bottom cart space */
         }
         a {
             text-decoration: none;
@@ -219,6 +218,7 @@
             transition: 0.25s;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
         .product-card:hover {
             transform: translateY(-4px);
@@ -230,15 +230,18 @@
             object-fit: cover;
             border-radius: 12px;
             background: #f1f5f9;
+            pointer-events: none;
         }
         .product-card h3 {
             font-size: 1rem;
             margin: 0.6rem 0 0.2rem;
+            pointer-events: none;
         }
         .product-card .price {
             font-weight: 700;
             font-size: 1.15rem;
             color: #0f172a;
+            pointer-events: none;
         }
         .product-card .discount {
             color: #ef4444;
@@ -246,16 +249,19 @@
             margin-left: 0.5rem;
             font-weight: 400;
             font-size: 0.85rem;
+            pointer-events: none;
         }
         .product-card .stock {
             font-size: 0.8rem;
             color: #64748b;
             margin: 0.2rem 0 0.6rem;
+            pointer-events: none;
         }
         .product-card .action-btns {
             display: flex;
             gap: 0.5rem;
             margin-top: auto;
+            pointer-events: none;
         }
         .product-card .action-btns button {
             flex: 1;
@@ -265,6 +271,7 @@
             transition: 0.2s;
             cursor: pointer;
             font-size: 0.85rem;
+            pointer-events: auto;
         }
         .product-card .btn-order {
             background: #0f172a;
@@ -282,6 +289,136 @@
             background: #cbd5e1;
         }
         .product-card .action-btns button:disabled {
+            background: #94a3b8;
+            color: #fff;
+            cursor: not-allowed;
+        }
+
+        /* ===== PRODUCT DETAIL MODAL ===== */
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            padding: 1rem;
+        }
+        .detail-modal.open {
+            display: flex;
+        }
+        .detail-box {
+            background: #fff;
+            border-radius: 24px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem 1.8rem;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .detail-box .close-detail {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .detail-box .close-detail:hover {
+            color: #0f172a;
+        }
+        .detail-box img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: #f8fafc;
+            margin-bottom: 1rem;
+        }
+        .detail-box .d-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .detail-box .d-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .detail-box .d-discount {
+            font-size: 1rem;
+            color: #ef4444;
+            text-decoration: line-through;
+            margin-left: 0.6rem;
+        }
+        .detail-box .d-stock {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin: 0.5rem 0;
+        }
+        .detail-box .d-category {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        .detail-box .d-desc {
+            font-size: 1rem;
+            color: #334155;
+            line-height: 1.6;
+            margin: 0.8rem 0 1.2rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 0.8rem;
+        }
+        .detail-box .d-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .detail-box .d-actions button {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.7rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .detail-box .d-actions .btn-order {
+            background: #0f172a;
+            color: #fff;
+        }
+        .detail-box .d-actions .btn-order:hover {
+            background: #facc15;
+            color: #0f172a;
+        }
+        .detail-box .d-actions .btn-cart {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .detail-box .d-actions .btn-cart:hover {
+            background: #cbd5e1;
+        }
+        .detail-box .d-actions button:disabled {
             background: #94a3b8;
             color: #fff;
             cursor: not-allowed;
@@ -475,7 +612,6 @@
             display: block;
         }
 
-        /* ফর্ম */
         .file-input-wrapper {
             display: flex;
             gap: 0.5rem;
@@ -595,7 +731,7 @@
             color: #b91c1c;
         }
 
-        /* অর্ডার কার্ড */
+        /* ===== ORDER ADMIN ===== */
         .order-admin-card {
             background: #fff;
             border-radius: 12px;
@@ -677,7 +813,7 @@
             background: #cbd5e1;
         }
 
-        /* ===== অর্ডার ডিটেইল মডাল ===== */
+        /* ===== ORDER DETAIL MODAL (admin) ===== */
         .order-detail-modal {
             position: fixed;
             top: 0;
@@ -688,7 +824,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1100;
+            z-index: 1200;
         }
         .order-detail-modal.open {
             display: flex;
@@ -881,6 +1017,15 @@
                 font-size: 0.75rem;
                 padding: 0.4rem 0;
             }
+            .detail-box {
+                padding: 1.5rem 1.2rem;
+            }
+            .detail-box .d-name {
+                font-size: 1.3rem;
+            }
+            .detail-box .d-price {
+                font-size: 1.5rem;
+            }
             .order-detail-box {
                 padding: 1.2rem;
                 width: 95vw;
@@ -1016,7 +1161,15 @@
         </div>
     </div>
 
-    <!-- ===== অর্ডার ডিটেইল মডাল ===== -->
+    <!-- ===== PRODUCT DETAIL MODAL (for customers) ===== -->
+    <div class="detail-modal" id="productDetailModal">
+        <div class="detail-box">
+            <button class="close-detail" onclick="closeProductDetail()">✕</button>
+            <div id="productDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- ===== ORDER DETAIL MODAL (for admin) ===== -->
     <div class="order-detail-modal" id="orderDetailModal">
         <div class="order-detail-box">
             <button class="close-detail" onclick="closeOrderDetail()">✕</button>
@@ -1099,6 +1252,8 @@
         const bannerAdminList = $('bannerAdminList');
         const orderDetailModal = $('orderDetailModal');
         const orderDetailContent = $('orderDetailContent');
+        const productDetailModal = $('productDetailModal');
+        const productDetailContent = $('productDetailContent');
 
         // ============================================================
         // HAMBURGER
@@ -1283,7 +1438,7 @@
                 const available = p.stock - qtyInCart;
                 const disabled = available <= 0;
                 return `
-                        <div class="product-card">
+                        <div class="product-card" onclick="openProductDetail(${p.id})">
                             <img src="${p.image_url || 'https://via.placeholder.com/240'}" alt="${p.name}" />
                             <h3>${p.name}</h3>
                             <div>
@@ -1292,10 +1447,10 @@
                             </div>
                             <div class="stock">স্টক: ${p.stock} | ${p.categories?.name || ''}</div>
                             <div class="action-btns">
-                                <button class="btn-order" ${disabled ? 'disabled' : ''} onclick="orderNow(${p.id})">
+                                <button class="btn-order" ${disabled ? 'disabled' : ''} onclick="event.stopPropagation(); orderNow(${p.id})">
                                     📦 অর্ডার করুন
                                 </button>
-                                <button class="btn-cart" ${disabled ? 'disabled' : ''} onclick="addToCart(${p.id})">
+                                <button class="btn-cart" ${disabled ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart(${p.id})">
                                     🛒 কার্টে রাখুন
                                 </button>
                             </div>
@@ -1308,6 +1463,54 @@
             searchTerm = searchInput.value;
             renderProducts();
         }
+
+        // ============================================================
+        // PRODUCT DETAIL MODAL
+        // ============================================================
+        function openProductDetail(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const inCart = cart.find(item => item.id === productId);
+            const qtyInCart = inCart ? inCart.quantity : 0;
+            const available = product.stock - qtyInCart;
+            const disabled = available <= 0;
+
+            const html = `
+                        <img src="${product.image_url || 'https://via.placeholder.com/400'}" alt="${product.name}" />
+                        <div class="d-name">${product.name}</div>
+                        <div>
+                            <span class="d-price">${product.discount_price || product.price} ৳</span>
+                            ${product.discount_price ? `<span class="d-discount">${product.price} ৳</span>` : ''}
+                        </div>
+                        <div class="d-stock">📦 স্টক: ${product.stock}</div>
+                        <div class="d-category">📂 ক্যাটাগরি: ${product.categories?.name || '—'}</div>
+                        <div class="d-desc">${product.description || 'বিবরণ নেই'}</div>
+                        <div class="d-actions">
+                            <button class="btn-order" ${disabled ? 'disabled' : ''} onclick="orderNow(${product.id}); closeProductDetail();">
+                                📦 অর্ডার করুন
+                            </button>
+                            <button class="btn-cart" ${disabled ? 'disabled' : ''} onclick="addToCart(${product.id}); closeProductDetail();">
+                                🛒 কার্টে রাখুন
+                            </button>
+                        </div>
+                    `;
+
+            productDetailContent.innerHTML = html;
+            productDetailModal.classList.add('open');
+        }
+
+        function closeProductDetail() {
+            productDetailModal.classList.remove('open');
+        }
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.detail-modal') && !e.target.closest('.detail-box')) {
+                closeProductDetail();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeProductDetail();
+        });
 
         // ============================================================
         // CART OPERATIONS
@@ -1328,11 +1531,9 @@
             showToast(`${product.name} কার্টে রাখা হয়েছে`);
         }
 
-        // অর্ডার করুন → কার্টে যোগ + চেকআউট খোলা
         function orderNow(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
-            // যদি ইতিমধ্যে কার্টে থাকে, পরিমাণ বাড়াও
             const existing = cart.find(item => item.id === productId);
             if (existing) {
                 if (existing.quantity < product.stock) existing.quantity++;
@@ -1343,9 +1544,7 @@
             updateCartBadge();
             renderCart();
             renderProducts();
-            // কার্ট খুলে চেকআউট ফোকাস করি
             toggleCart();
-            // চেকআউট ফর্মে স্ক্রল
             setTimeout(() => {
                 const form = checkoutForm;
                 if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1356,7 +1555,6 @@
         function updateCartBadge() {
             const total = cart.reduce((sum, item) => sum + item.quantity, 0);
             bottomCartCount.textContent = total;
-            // total price
             const totalPrice = cart.reduce((sum, item) => {
                 const price = item.discount_price || item.price;
                 return sum + price * item.quantity;
@@ -1475,22 +1673,26 @@
             const fileName = `${Date.now()}.${fileExt}`;
             const filePath = `products/${fileName}`;
 
-            const { data, error } = await supabaseClient.storage
-                .from('product-images')
-                .upload(filePath, file);
+            try {
+                const { data, error } = await supabaseClient.storage
+                    .from('product-images')
+                    .upload(filePath, file);
+                if (error) throw error;
 
-            if (error) {
-                showToast('❌ ছবি আপলোড ব্যর্থ: ' + error.message);
-                return;
+                const { data: urlData } = supabaseClient.storage
+                    .from('product-images')
+                    .getPublicUrl(filePath);
+
+                document.getElementById('pImage').value = urlData.publicUrl;
+                showToast('✅ ছবি আপলোড সফল!');
+            } catch (err) {
+                if (err.message && err.message.includes('row-level security policy')) {
+                    showToast('⚠️ RLS পলিসি সেট করুন: storage বাকেটে authenticated ইউজারের জন্য INSERT অনুমতি দিন।');
+                } else {
+                    showToast('❌ ছবি আপলোড ব্যর্থ: ' + err.message);
+                }
+                console.error(err);
             }
-
-            const { data: urlData } = supabaseClient.storage
-                .from('product-images')
-                .getPublicUrl(filePath);
-
-            const publicUrl = urlData.publicUrl;
-            document.getElementById('pImage').value = publicUrl;
-            showToast('✅ ছবি আপলোড সফল!');
         }
 
         async function uploadBannerImage(input) {
@@ -1500,22 +1702,26 @@
             const fileName = `${Date.now()}.${fileExt}`;
             const filePath = `banners/${fileName}`;
 
-            const { data, error } = await supabaseClient.storage
-                .from('product-images')
-                .upload(filePath, file);
+            try {
+                const { data, error } = await supabaseClient.storage
+                    .from('product-images')
+                    .upload(filePath, file);
+                if (error) throw error;
 
-            if (error) {
-                showToast('❌ ছবি আপলোড ব্যর্থ: ' + error.message);
-                return;
+                const { data: urlData } = supabaseClient.storage
+                    .from('product-images')
+                    .getPublicUrl(filePath);
+
+                document.getElementById('bImage').value = urlData.publicUrl;
+                showToast('✅ ছবি আপলোড সফল!');
+            } catch (err) {
+                if (err.message && err.message.includes('row-level security policy')) {
+                    showToast('⚠️ RLS পলিসি সেট করুন: storage বাকেটে authenticated ইউজারের জন্য INSERT অনুমতি দিন।');
+                } else {
+                    showToast('❌ ছবি আপলোড ব্যর্থ: ' + err.message);
+                }
+                console.error(err);
             }
-
-            const { data: urlData } = supabaseClient.storage
-                .from('product-images')
-                .getPublicUrl(filePath);
-
-            const publicUrl = urlData.publicUrl;
-            document.getElementById('bImage').value = publicUrl;
-            showToast('✅ ছবি আপলোড সফল!');
         }
 
         // ============================================================
@@ -1614,11 +1820,10 @@
         }
 
         // ============================================================
-        // অর্ডার ডিটেইল ভিউ (মডাল)
+        // অর্ডার ডিটেইল ভিউ (অ্যাডমিন)
         // ============================================================
         async function viewOrderDetail(orderId) {
             try {
-                // অর্ডার তথ্য
                 const { data: order, error: orderErr } = await supabaseClient
                     .from('orders')
                     .select('*')
@@ -1626,7 +1831,6 @@
                     .single();
                 if (orderErr) { showToast('❌ অর্ডার লোড ব্যর্থ'); return; }
 
-                // অর্ডার আইটেম
                 const { data: items, error: itemsErr } = await supabaseClient
                     .from('order_items')
                     .select('*, products(name)')
@@ -1703,20 +1907,29 @@
 
             const payload = { name, price, discount_price: discount, stock, category_id, image_url, description };
 
-            if (editingProductId) {
-                const { error } = await supabaseClient.from('products').update(payload).eq('id', editingProductId);
-                if (error) { showToast('❌ আপডেট ব্যর্থ: ' + error.message); return; }
-                showToast('✅ প্রোডাক্ট আপডেট হয়েছে');
-                editingProductId = null;
-            } else {
-                const { error } = await supabaseClient.from('products').insert(payload);
-                if (error) { showToast('❌ যোগ করতে ব্যর্থ: ' + error.message); return; }
-                showToast('✅ নতুন প্রোডাক্ট যোগ হয়েছে');
+            try {
+                if (editingProductId) {
+                    const { error } = await supabaseClient.from('products').update(payload).eq('id', editingProductId);
+                    if (error) throw error;
+                    showToast('✅ প্রোডাক্ট আপডেট হয়েছে');
+                    editingProductId = null;
+                } else {
+                    const { error } = await supabaseClient.from('products').insert(payload);
+                    if (error) throw error;
+                    showToast('✅ নতুন প্রোডাক্ট যোগ হয়েছে');
+                }
+                productForm.reset();
+                document.getElementById('pImageFile').value = '';
+                loadAdminProducts();
+                loadProducts();
+            } catch (err) {
+                if (err.message && err.message.includes('row-level security policy')) {
+                    showToast('⚠️ RLS পলিসি সেট করুন: products টেবিলে authenticated ইউজারের জন্য INSERT অনুমতি দিন।');
+                } else {
+                    showToast('❌ ' + err.message);
+                }
+                console.error(err);
             }
-            productForm.reset();
-            document.getElementById('pImageFile').value = '';
-            loadAdminProducts();
-            loadProducts();
         });
 
         async function editProduct(id) {
