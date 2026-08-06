@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ===== ক্যাশ বাস্টিং মেটা ===== -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Gadget Sport</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
@@ -141,7 +145,7 @@
             padding: 1.5rem 1.5rem 0;
         }
 
-        /* ===== BANNER CAROUSEL ===== */
+        /* ===== BANNER CAROUSEL (শুধু ফরওয়ার্ড) ===== */
         .banner-carousel {
             position: relative;
             width: 100%;
@@ -179,40 +183,6 @@
             transform: scale(1.02);
         }
 
-        /* dots */
-        .banner-dots {
-            position: absolute;
-            bottom: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.35);
-            padding: 6px 14px;
-            border-radius: 30px;
-            backdrop-filter: blur(4px);
-        }
-        .banner-dots button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            border: 2px solid transparent;
-            transition: 0.3s;
-            cursor: pointer;
-            padding: 0;
-        }
-        .banner-dots button.active {
-            background: #facc15;
-            border-color: #fff;
-            transform: scale(1.2);
-        }
-        .banner-dots button:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        /* nav arrows */
         .banner-arrow {
             position: absolute;
             top: 50%;
@@ -237,9 +207,6 @@
             background: rgba(0, 0, 0, 0.65);
             transform: translateY(-50%) scale(1.05);
         }
-        .banner-arrow.prev {
-            left: 12px;
-        }
         .banner-arrow.next {
             right: 12px;
         }
@@ -254,20 +221,8 @@
                 height: 32px;
                 font-size: 1.2rem;
             }
-            .banner-arrow.prev {
-                left: 6px;
-            }
             .banner-arrow.next {
                 right: 6px;
-            }
-            .banner-dots {
-                bottom: 8px;
-                padding: 4px 10px;
-                gap: 6px;
-            }
-            .banner-dots button {
-                width: 10px;
-                height: 10px;
             }
         }
         @media (max-width: 480px) {
@@ -392,17 +347,23 @@
             font-size: 0.85rem;
             pointer-events: auto;
         }
+        /* অর্ডার বাটন – বড় */
         .product-card .btn-order {
             background: #0f172a;
             color: #fff;
+            font-size: 1rem;
+            padding: 0.6rem 0;
         }
         .product-card .btn-order:hover {
             background: #facc15;
             color: #0f172a;
         }
+        /* কার্ট বাটন – ছোট */
         .product-card .btn-cart {
             background: #e2e8f0;
             color: #0f172a;
+            font-size: 0.75rem;
+            padding: 0.4rem 0;
         }
         .product-card .btn-cart:hover {
             background: #cbd5e1;
@@ -525,6 +486,8 @@
         .detail-box .d-actions .btn-order {
             background: #0f172a;
             color: #fff;
+            font-size: 1.1rem;
+            padding: 0.8rem 0;
         }
         .detail-box .d-actions .btn-order:hover {
             background: #facc15;
@@ -533,6 +496,8 @@
         .detail-box .d-actions .btn-cart {
             background: #e2e8f0;
             color: #0f172a;
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
         }
         .detail-box .d-actions .btn-cart:hover {
             background: #cbd5e1;
@@ -1191,12 +1156,10 @@
     <!-- ===== CONTAINER ===== -->
     <div class="container">
 
-        <!-- ===== BANNER CAROUSEL ===== -->
+        <!-- ===== BANNER CAROUSEL (শুধু নেক্সট অ্যারো + অটো) ===== -->
         <div class="banner-carousel" id="bannerCarousel">
             <div class="banner-slides" id="bannerSlides"></div>
-            <button class="banner-arrow prev" id="bannerPrev" aria-label="পূর্ববর্তী">‹</button>
             <button class="banner-arrow next" id="bannerNext" aria-label="পরবর্তী">›</button>
-            <div class="banner-dots" id="bannerDots"></div>
         </div>
 
         <!-- SEARCH & CATEGORY -->
@@ -1356,8 +1319,6 @@
         const productGrid = $('productGrid');
         const categoryFilter = $('categoryFilter');
         const bannerSlides = $('bannerSlides');
-        const bannerDots = $('bannerDots');
-        const bannerPrev = $('bannerPrev');
         const bannerNext = $('bannerNext');
         const cartOverlay = $('cartOverlay');
         const cartItems = $('cartItems');
@@ -1525,7 +1486,7 @@
         }
 
         // ============================================================
-        // BANNER CAROUSEL
+        // BANNER CAROUSEL (শুধু ফরওয়ার্ড)
         // ============================================================
         async function loadBanners() {
             const { data, error } = await supabaseClient.from('banners').select('*').order('created_at');
@@ -1540,38 +1501,21 @@
 
         function renderBannerCarousel() {
             const slidesEl = bannerSlides;
-            const dotsEl = bannerDots;
 
             if (!bannerData || bannerData.length === 0) {
                 slidesEl.innerHTML =
                     `<div class="banner-slide" style="display:flex;align-items:center;justify-content:center;background:#1e293b;color:#94a3b8;font-size:1rem;min-height:180px;">📷 ব্যানার যোগ করুন</div>`;
-                dotsEl.innerHTML = '';
                 return;
             }
 
-            // Slides
-            slidesEl.innerHTML = bannerData.map((b, i) => `
-                    <div class="banner-slide" data-index="${i}">
+            slidesEl.innerHTML = bannerData.map((b) => `
+                    <div class="banner-slide">
                         <a href="${b.link || '#'}" target="_blank">
                             <img src="${b.image_url}" alt="${b.title || 'ব্যানার'}" loading="lazy" />
                         </a>
                     </div>
                 `).join('');
 
-            // Dots
-            dotsEl.innerHTML = bannerData.map((_, i) =>
-                `<button class="${i === currentBannerIndex ? 'active' : ''}" data-index="${i}" aria-label="স্লাইড ${i+1}"></button>`
-            ).join('');
-
-            // Dot click
-            dotsEl.querySelectorAll('button').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const idx = parseInt(btn.dataset.index);
-                    goToBanner(idx);
-                });
-            });
-
-            // Update position
             updateBannerPosition();
         }
 
@@ -1579,39 +1523,23 @@
             const slides = bannerSlides;
             const total = bannerData.length;
             if (total === 0) return;
-            // Clamp index
             if (currentBannerIndex >= total) currentBannerIndex = 0;
             if (currentBannerIndex < 0) currentBannerIndex = total - 1;
             slides.style.transform = `translateX(-${currentBannerIndex * 100}%)`;
-
-            // Update dots
-            bannerDots.querySelectorAll('button').forEach((btn, i) => {
-                btn.classList.toggle('active', i === currentBannerIndex);
-            });
         }
 
-        function goToBanner(index) {
+        function goToNextBanner() {
             const total = bannerData.length;
             if (total === 0) return;
-            if (index < 0) index = total - 1;
-            if (index >= total) index = 0;
-            currentBannerIndex = index;
+            currentBannerIndex = (currentBannerIndex + 1) % total;
             updateBannerPosition();
             resetBannerAutoSlide();
-        }
-
-        function nextBanner() {
-            goToBanner(currentBannerIndex + 1);
-        }
-
-        function prevBanner() {
-            goToBanner(currentBannerIndex - 1);
         }
 
         function startBannerAutoSlide() {
             stopBannerAutoSlide();
             if (bannerData.length > 1) {
-                bannerInterval = setInterval(nextBanner, BANNER_AUTO_SLIDE_INTERVAL);
+                bannerInterval = setInterval(goToNextBanner, BANNER_AUTO_SLIDE_INTERVAL);
             }
         }
 
@@ -1625,28 +1553,21 @@
         function resetBannerAutoSlide() {
             stopBannerAutoSlide();
             if (bannerData.length > 1) {
-                bannerInterval = setInterval(nextBanner, BANNER_AUTO_SLIDE_INTERVAL);
+                bannerInterval = setInterval(goToNextBanner, BANNER_AUTO_SLIDE_INTERVAL);
             }
         }
 
-        // Event listeners for arrows
-        if (bannerPrev) bannerPrev.addEventListener('click', prevBanner);
-        if (bannerNext) bannerNext.addEventListener('click', nextBanner);
+        if (bannerNext) bannerNext.addEventListener('click', goToNextBanner);
 
-        // Pause on hover/touch
         const carousel = document.getElementById('bannerCarousel');
         if (carousel) {
             carousel.addEventListener('mouseenter', stopBannerAutoSlide);
             carousel.addEventListener('mouseleave', () => {
-                if (bannerData.length > 1) {
-                    startBannerAutoSlide();
-                }
+                if (bannerData.length > 1) startBannerAutoSlide();
             });
             carousel.addEventListener('touchstart', stopBannerAutoSlide);
             carousel.addEventListener('touchend', () => {
-                if (bannerData.length > 1) {
-                    startBannerAutoSlide();
-                }
+                if (bannerData.length > 1) startBannerAutoSlide();
             });
         }
 
@@ -2266,7 +2187,6 @@
             init();
         }
 
-        // Clean up interval on page unload
         window.addEventListener('beforeunload', function() {
             stopBannerAutoSlide();
         });
