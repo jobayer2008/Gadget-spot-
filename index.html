@@ -141,26 +141,145 @@
             padding: 1.5rem 1.5rem 0;
         }
 
-        /* ===== BANNER ===== */
-        .banner-slider {
+        /* ===== BANNER CAROUSEL ===== */
+        .banner-carousel {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            background: #0f172a;
+        }
+        .banner-slides {
             display: flex;
-            gap: 1.2rem;
-            overflow-x: auto;
-            padding: 0.5rem 0 1.8rem;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
         }
-        .banner-slider img {
-            height: 180px;
-            min-width: 280px;
+        .banner-slide {
+            flex: 0 0 100%;
+            min-height: 180px;
+            max-height: 320px;
+            position: relative;
+        }
+        .banner-slide a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 14px;
-            scroll-snap-align: start;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
+            display: block;
+            background: #1e293b;
+            transition: transform 0.4s ease;
         }
-        .banner-slider img:hover {
+        .banner-slide a:hover img {
             transform: scale(1.02);
+        }
+
+        /* dots */
+        .banner-dots {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 6px 14px;
+            border-radius: 30px;
+            backdrop-filter: blur(4px);
+        }
+        .banner-dots button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+            padding: 0;
+        }
+        .banner-dots button.active {
+            background: #facc15;
+            border-color: #fff;
+            transform: scale(1.2);
+        }
+        .banner-dots button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* nav arrows */
+        .banner-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.6rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .banner-arrow:hover {
+            background: rgba(0, 0, 0, 0.65);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .banner-arrow.prev {
+            left: 12px;
+        }
+        .banner-arrow.next {
+            right: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .banner-slide {
+                min-height: 140px;
+                max-height: 200px;
+            }
+            .banner-arrow {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+            }
+            .banner-arrow.prev {
+                left: 6px;
+            }
+            .banner-arrow.next {
+                right: 6px;
+            }
+            .banner-dots {
+                bottom: 8px;
+                padding: 4px 10px;
+                gap: 6px;
+            }
+            .banner-dots button {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .banner-slide {
+                min-height: 110px;
+                max-height: 160px;
+            }
+            .banner-arrow {
+                width: 26px;
+                height: 26px;
+                font-size: 1rem;
+            }
         }
 
         /* ===== SEARCH & CATEGORY ===== */
@@ -978,10 +1097,6 @@
             .cart-panel {
                 width: 100%;
             }
-            .banner-slider img {
-                height: 140px;
-                min-width: 200px;
-            }
             .mobile-menu {
                 display: none !important;
             }
@@ -1076,8 +1191,13 @@
     <!-- ===== CONTAINER ===== -->
     <div class="container">
 
-        <!-- BANNER -->
-        <div class="banner-slider" id="bannerContainer"></div>
+        <!-- ===== BANNER CAROUSEL ===== -->
+        <div class="banner-carousel" id="bannerCarousel">
+            <div class="banner-slides" id="bannerSlides"></div>
+            <button class="banner-arrow prev" id="bannerPrev" aria-label="পূর্ববর্তী">‹</button>
+            <button class="banner-arrow next" id="bannerNext" aria-label="পরবর্তী">›</button>
+            <div class="banner-dots" id="bannerDots"></div>
+        </div>
 
         <!-- SEARCH & CATEGORY -->
         <div class="search-filter">
@@ -1223,13 +1343,22 @@
         let editingProductId = null;
         let searchTerm = '';
 
+        // Banner carousel state
+        let bannerData = [];
+        let currentBannerIndex = 0;
+        let bannerInterval = null;
+        const BANNER_AUTO_SLIDE_INTERVAL = 4000;
+
         // ============================================================
         // DOM REFS
         // ============================================================
         const $ = id => document.getElementById(id);
         const productGrid = $('productGrid');
         const categoryFilter = $('categoryFilter');
-        const bannerContainer = $('bannerContainer');
+        const bannerSlides = $('bannerSlides');
+        const bannerDots = $('bannerDots');
+        const bannerPrev = $('bannerPrev');
+        const bannerNext = $('bannerNext');
         const cartOverlay = $('cartOverlay');
         const cartItems = $('cartItems');
         const cartTotal = $('cartTotal');
@@ -1395,13 +1524,130 @@
             renderProducts();
         }
 
+        // ============================================================
+        // BANNER CAROUSEL
+        // ============================================================
         async function loadBanners() {
             const { data, error } = await supabaseClient.from('banners').select('*').order('created_at');
             if (error) { console.error(error);
-                bannerContainer.innerHTML = ''; return; }
-            bannerContainer.innerHTML = data.map(b =>
-                `<a href="${b.link || '#'}" target="_blank"><img src="${b.image_url}" alt="${b.title || 'ব্যানার'}" /></a>`
+                bannerData = [];
+                renderBannerCarousel();
+                return; }
+            bannerData = data || [];
+            renderBannerCarousel();
+            startBannerAutoSlide();
+        }
+
+        function renderBannerCarousel() {
+            const slidesEl = bannerSlides;
+            const dotsEl = bannerDots;
+
+            if (!bannerData || bannerData.length === 0) {
+                slidesEl.innerHTML =
+                    `<div class="banner-slide" style="display:flex;align-items:center;justify-content:center;background:#1e293b;color:#94a3b8;font-size:1rem;min-height:180px;">📷 ব্যানার যোগ করুন</div>`;
+                dotsEl.innerHTML = '';
+                return;
+            }
+
+            // Slides
+            slidesEl.innerHTML = bannerData.map((b, i) => `
+                    <div class="banner-slide" data-index="${i}">
+                        <a href="${b.link || '#'}" target="_blank">
+                            <img src="${b.image_url}" alt="${b.title || 'ব্যানার'}" loading="lazy" />
+                        </a>
+                    </div>
+                `).join('');
+
+            // Dots
+            dotsEl.innerHTML = bannerData.map((_, i) =>
+                `<button class="${i === currentBannerIndex ? 'active' : ''}" data-index="${i}" aria-label="স্লাইড ${i+1}"></button>`
             ).join('');
+
+            // Dot click
+            dotsEl.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.index);
+                    goToBanner(idx);
+                });
+            });
+
+            // Update position
+            updateBannerPosition();
+        }
+
+        function updateBannerPosition() {
+            const slides = bannerSlides;
+            const total = bannerData.length;
+            if (total === 0) return;
+            // Clamp index
+            if (currentBannerIndex >= total) currentBannerIndex = 0;
+            if (currentBannerIndex < 0) currentBannerIndex = total - 1;
+            slides.style.transform = `translateX(-${currentBannerIndex * 100}%)`;
+
+            // Update dots
+            bannerDots.querySelectorAll('button').forEach((btn, i) => {
+                btn.classList.toggle('active', i === currentBannerIndex);
+            });
+        }
+
+        function goToBanner(index) {
+            const total = bannerData.length;
+            if (total === 0) return;
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentBannerIndex = index;
+            updateBannerPosition();
+            resetBannerAutoSlide();
+        }
+
+        function nextBanner() {
+            goToBanner(currentBannerIndex + 1);
+        }
+
+        function prevBanner() {
+            goToBanner(currentBannerIndex - 1);
+        }
+
+        function startBannerAutoSlide() {
+            stopBannerAutoSlide();
+            if (bannerData.length > 1) {
+                bannerInterval = setInterval(nextBanner, BANNER_AUTO_SLIDE_INTERVAL);
+            }
+        }
+
+        function stopBannerAutoSlide() {
+            if (bannerInterval) {
+                clearInterval(bannerInterval);
+                bannerInterval = null;
+            }
+        }
+
+        function resetBannerAutoSlide() {
+            stopBannerAutoSlide();
+            if (bannerData.length > 1) {
+                bannerInterval = setInterval(nextBanner, BANNER_AUTO_SLIDE_INTERVAL);
+            }
+        }
+
+        // Event listeners for arrows
+        if (bannerPrev) bannerPrev.addEventListener('click', prevBanner);
+        if (bannerNext) bannerNext.addEventListener('click', nextBanner);
+
+        // Pause on hover/touch
+        const carousel = document.getElementById('bannerCarousel');
+        if (carousel) {
+            carousel.addEventListener('mouseenter', stopBannerAutoSlide);
+            carousel.addEventListener('mouseleave', () => {
+                if (bannerData.length > 1) {
+                    startBannerAutoSlide();
+                }
+            });
+            carousel.addEventListener('touchstart', stopBannerAutoSlide);
+            carousel.addEventListener('touchend', () => {
+                if (bannerData.length > 1) {
+                    startBannerAutoSlide();
+                }
+            });
         }
 
         // ============================================================
@@ -2019,6 +2265,11 @@
         } else {
             init();
         }
+
+        // Clean up interval on page unload
+        window.addEventListener('beforeunload', function() {
+            stopBannerAutoSlide();
+        });
     </script>
 </body>
 </html>
