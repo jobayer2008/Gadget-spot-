@@ -140,14 +140,18 @@
             padding: 1.5rem 1.5rem 0;
         }
 
-        /* ===== BANNER ===== */
+        /* ===== BANNER SLIDER ===== */
         .banner-slider {
             display: flex;
             gap: 1.2rem;
             overflow-x: auto;
             padding: 0.5rem 0 1.8rem;
             scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
+        }
+        .banner-slider::-webkit-scrollbar {
+            display: none;
         }
         .banner-slider img {
             height: 180px;
@@ -157,9 +161,43 @@
             scroll-snap-align: start;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: 0.3s;
+            flex-shrink: 0;
         }
         .banner-slider img:hover {
             transform: scale(1.02);
+        }
+
+        /* ===== FLOATING ACTION BUTTONS ===== */
+        .floating-buttons {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 800;
+        }
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+        .whatsapp-btn {
+            background-color: #25d366;
+        }
+        .call-btn {
+            background-color: #0284c7;
         }
 
         /* ===== SEARCH & CATEGORY ===== */
@@ -1053,6 +1091,15 @@
                 width: 80px;
                 font-size: 0.85rem;
             }
+            .floating-buttons {
+                bottom: 85px;
+                right: 15px;
+            }
+            .floating-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
         }
         @media (min-width: 769px) {
             .mobile-menu {
@@ -1092,10 +1139,20 @@
         </button>
     </div>
 
+    <!-- ===== FLOATING BUTTONS (WHATSAPP & CALL) ===== -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/8801831108144" target="_blank" class="floating-btn whatsapp-btn" title="WhatsApp এ মেসেজ দিন">
+            💬
+        </a>
+        <a href="tel:+8801831108144" class="floating-btn call-btn" title="সরাসরি কল করুন">
+            📞
+        </a>
+    </div>
+
     <!-- ===== CONTAINER ===== -->
     <div class="container">
 
-        <!-- BANNER -->
+        <!-- BANNER SLIDER -->
         <div class="banner-slider" id="bannerContainer"></div>
 
         <!-- SEARCH & CATEGORY -->
@@ -1280,6 +1337,7 @@
         let editingProductId = null;
         let searchTerm = '';
         let deliveryCharge = 0;
+        let bannerTimer = null;
 
         // ============================================================
         // DOM REFS
@@ -1499,9 +1557,31 @@
             const { data, error } = await supabaseClient.from('banners').select('*').order('created_at');
             if (error) { console.error(error);
                 bannerContainer.innerHTML = ''; return; }
+            
             bannerContainer.innerHTML = data.map(b =>
                 `<a href="${b.link || '#'}" target="_blank"><img src="${b.image_url}" alt="${b.title || 'ব্যানার'}" /></a>`
             ).join('');
+
+            startBannerAutoSlide();
+        }
+
+        // ============================================================
+        // AUTO BANNER SLIDE LOGIC
+        // ============================================================
+        function startBannerAutoSlide() {
+            if (bannerTimer) clearInterval(bannerTimer);
+            bannerTimer = setInterval(() => {
+                if (!bannerContainer) return;
+                const images = bannerContainer.querySelectorAll('img');
+                if (images.length <= 1) return;
+
+                const firstImgWidth = images[0].clientWidth + 19; // width + gap
+                if (bannerContainer.scrollLeft + bannerContainer.clientWidth >= bannerContainer.scrollWidth - 10) {
+                    bannerContainer.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    bannerContainer.scrollBy({ left: firstImgWidth, behavior: 'smooth' });
+                }
+            }, 3000); // প্রতি ৩ সেকেন্ডে স্লাইড হবে
         }
 
         // ============================================================
@@ -1743,7 +1823,6 @@
                 return; 
             }
 
-            // বিভাগ, জেলা এবং বিস্তারিত ঠিকানা একই সাথে সুন্দর করে তৈরি করা হলো
             const fullAddress = `বিভাগ: ${division}, জেলা: ${district}, বিস্তারিত: ${detailAddress}`;
 
             const subtotal = cart.reduce((sum, item) => {
