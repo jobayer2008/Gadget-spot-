@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ---- প্রিমিয়াম কালার স্কিম (শুধুমাত্র লাইট মোড) ---- */
     :root {
       --bg-main: #f4f7fa;
       --card-bg: #ffffff;
@@ -26,483 +25,150 @@
       --nav-bg: rgba(255, 255, 255, 0.95);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Hind Siliguri', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); padding-bottom: 90px; min-height: 100vh; }
 
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      padding-bottom: 90px;
-      min-height: 100vh;
-    }
-
-    /* ---- নোটিফিকেশন টোস্ট ---- */
-    #toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
     .toast {
-      background: var(--primary);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      box-shadow: 0 10px 25px var(--shadow);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      animation: fadeInRight 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+      background: var(--primary); color: #fff; padding: 12px 20px; border-radius: 12px;
+      margin-bottom: 10px; box-shadow: 0 10px 25px var(--shadow); display: flex; align-items: center;
+      gap: 10px; font-weight: 600; animation: fadeInRight 0.3s forwards, fadeOut 0.3s 2.7s forwards;
     }
     @keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
 
-    /* ---- পেজ লেআউট ---- */
-    .page {
-      display: none;
-      padding: 16px 12px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+    .page { display: none; padding: 16px 12px; max-width: 800px; margin: 0 auto; }
     .page.active { display: block; }
 
-    /* হেডার ও ব্র্যান্ডিং (প্রতিষ্ঠানের নাম বড়) */
+    /* ব্রান্ডিং হেডার */
     .app-header {
-      background: var(--nav-bg);
-      padding: 16px 20px;
-      box-shadow: 0 4px 15px var(--shadow);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
+      background: var(--nav-bg); padding: 16px 20px; box-shadow: 0 4px 15px var(--shadow);
+      border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;
+      align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
     }
     .brand-title {
-      font-family: 'Poppins', 'Hind Siliguri', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: 'Poppins', 'Hind Siliguri', sans-serif; font-size: 1.8rem; font-weight: 800;
+      color: var(--primary); letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;
     }
-    .brand-title span {
-      color: var(--accent);
-    }
-    .header-icons {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
+    .brand-title span { color: var(--accent); }
+    .header-icons { display: flex; gap: 16px; align-items: center; }
     .header-icons i { font-size: 1.3rem; color: var(--text-main); cursor: pointer; }
 
-    /* ব্যানার স্লাইডার */
+    /* স্লাইডার */
     .slider-container {
-      position: relative;
-      width: 100%;
-      height: 200px;
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      border: 1px solid var(--border-color);
-      background: var(--card-bg);
-      box-shadow: 0 4px 15px var(--shadow);
+      position: relative; width: 100%; height: 200px; border-radius: 18px; overflow: hidden;
+      margin-bottom: 16px; border: 1px solid var(--border-color); background: var(--card-bg); box-shadow: 0 4px 15px var(--shadow);
     }
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
+    .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s ease-in-out; }
     .slide.active { opacity: 1; }
     .slide img { width: 100%; height: 100%; object-fit: cover; }
     .slider-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.8);
-      color: var(--text-main);
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.8);
+      color: var(--text-main); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
     }
     .slider-btn.prev { left: 10px; }
     .slider-btn.next { right: 10px; }
 
-    /* নোটিশ বক্স */
     .notice-box {
-      background: #fef3c7;
-      border: 1px solid #fde047;
-      padding: 12px 16px;
-      border-radius: 14px;
-      margin: 12px 0;
-      font-size: 0.95rem;
-      color: #92400e;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
+      background: #fef3c7; border: 1px solid #fde047; padding: 12px 16px; border-radius: 14px;
+      margin: 12px 0; font-size: 0.95rem; color: #92400e; display: flex; align-items: center; gap: 10px; font-weight: 600;
     }
 
-    /* প্রোডাক্ট গ্রিড */
-    .section-title {
-      font-size: 1.2rem;
-      margin: 20px 0 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-main);
-      font-weight: 700;
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-      gap: 14px;
-    }
+    /* প্রোডাক্ট গ্রিড ও প্রাইসিং */
+    .section-title { font-size: 1.2rem; margin: 20px 0 14px; display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
     .product-card {
-      background: var(--card-bg);
-      border-radius: 18px;
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 4px 12px var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
+      background: var(--card-bg); border-radius: 18px; padding: 12px; border: 1px solid var(--border-color);
+      display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
     }
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    }
-    .product-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      background: var(--card-inner);
-      border-radius: 12px;
-      margin-bottom: 8px;
-    }
-    .product-card h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: var(--text-main);
-    }
-    .product-card .price {
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 1.15rem;
-      margin-top: 4px;
-    }
-    .product-card .discount {
-      color: var(--danger);
-      font-size: 0.75rem;
-      background: #fee2e2;
-      padding: 2px 8px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 2px;
-      font-weight: 600;
-    }
-    .card-buttons {
-      display: flex;
-      gap: 6px;
-      margin-top: 12px;
-    }
-    .card-buttons button {
-      flex: 1;
-      padding: 9px 4px;
-      font-size: 0.8rem;
-      border-radius: 10px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; height: 140px; object-fit: cover; background: var(--card-inner); border-radius: 12px; margin-bottom: 8px; }
+    .product-card h4 { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* প্রাইস স্টাইলিং (পূর্বের দাম ও বর্তমান ছাড়ের দাম) */
+    .price-box { margin-top: 4px; display: flex; flex-direction: column; }
+    .original-price { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; }
+    .current-price { font-weight: 800; color: var(--primary); font-size: 1.15rem; }
+    .discount-tag { color: var(--danger); font-size: 0.75rem; background: #fee2e2; padding: 2px 8px; border-radius: 12px; display: inline-block; font-weight: 600; width: fit-content; margin-top: 2px; }
+
+    .card-buttons { display: flex; gap: 6px; margin-top: 12px; }
+    .card-buttons button { flex: 1; padding: 9px 4px; font-size: 0.8rem; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; }
     .btn-add-cart { background: #e2e8f0; color: var(--text-main); }
     .btn-buy-now { background: var(--primary); color: white; }
 
     /* মোডাল */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      backdrop-filter: blur(4px);
-    }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
     .modal.active { display: flex; }
-    .modal-content {
-      background: var(--card-bg);
-      border-radius: 20px;
-      max-width: 500px;
-      width: 100%;
-      padding: 22px;
-      border: 1px solid var(--border-color);
-      position: relative;
-      color: var(--text-main);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .close-modal {
-      position: absolute;
-      top: 14px; right: 18px;
-      font-size: 1.5rem;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
+    .modal-content { background: var(--card-bg); border-radius: 20px; max-width: 500px; width: 100%; padding: 22px; border: 1px solid var(--border-color); position: relative; }
+    .close-modal { position: absolute; top: 14px; right: 18px; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
     /* কার্ট আইটেম */
-    .cart-item {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      border: 1px solid var(--border-color);
-    }
-    .cart-item img {
-      width: 55px; height: 55px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
+    .cart-item { background: var(--card-bg); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); }
+    .cart-item img { width: 55px; height: 55px; object-fit: cover; border-radius: 10px; }
     .cart-item .details { flex: 1; margin-left: 12px; }
     .cart-item .qty { display: flex; align-items: center; gap: 8px; }
-    .cart-item .qty button {
-      background: #e2e8f0;
-      color: var(--text-main);
-      border: none;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: bold;
-    }
+    .cart-item .qty button { background: #e2e8f0; color: var(--text-main); border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-weight: bold; }
 
-    /* ফর্ম ও বোতাম */
-    .order-form, .admin-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 20px;
-      margin: 14px 0;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 15px var(--shadow);
-    }
+    /* ফর্ম ও বাটন */
+    .order-form, .admin-card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin: 14px 0; border: 1px solid var(--border-color); box-shadow: 0 4px 15px var(--shadow); }
     .form-group { margin-bottom: 14px; }
-    .form-group label {
-      display: block;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    select, input, textarea {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      background: var(--card-inner);
-      color: var(--text-main);
-      font-size: 0.95rem;
-      outline: none;
-    }
-    select:focus, input:focus { border-color: var(--primary); background: #fff; }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      font-size: 0.95rem;
-    }
+    .form-group label { display: block; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+    select, input, textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--card-inner); color: var(--text-main); font-size: 0.95rem; outline: none; }
+    
+    .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; font-size: 0.95rem; }
     .btn:hover { background: var(--primary-hover); }
 
-    /* বটম নেভিগেশন */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--nav-bg);
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0 12px;
-      border-top: 1px solid var(--border-color);
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      box-shadow: 0 -4px 15px var(--shadow);
-    }
-    .bottom-nav button {
-      background: transparent;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      gap: 4px;
-      cursor: pointer;
-      flex: 1;
-    }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 10px 0 12px; border-top: 1px solid var(--border-color); backdrop-filter: blur(10px); z-index: 100; }
+    .bottom-nav button { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); gap: 4px; cursor: pointer; flex: 1; }
     .bottom-nav button i { font-size: 1.3rem; }
     .bottom-nav button.active { color: var(--primary); }
 
-    /* অ্যাডমিন ট্যাব */
-    .admin-nav {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-    }
-    .admin-nav-btn {
-      background: var(--card-inner);
-      color: var(--text-muted);
-      border: 1px solid var(--border-color);
-      padding: 9px 16px;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      white-space: nowrap;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .admin-nav-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+    .admin-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; }
+    .admin-nav-btn { background: var(--card-inner); color: var(--text-muted); border: 1px solid var(--border-color); padding: 9px 16px; border-radius: 12px; font-size: 0.88rem; white-space: nowrap; cursor: pointer; font-weight: 600; }
+    .admin-nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     .admin-tab-content { display: none; }
     .admin-tab-content.active { display: block; }
 
-    /* অ্যাডমিন ম্যানেজমেন্ট আইটেম লিস্ট */
-    .admin-item-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--card-inner);
-      padding: 10px 12px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      border: 1px solid var(--border-color);
-      gap: 10px;
-    }
-    .admin-item-row img {
-      width: 45px;
-      height: 45px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+    .admin-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-inner); padding: 10px 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-color); gap: 10px; }
+    .admin-item-row img { width: 45px; height: 45px; object-fit: cover; border-radius: 8px; }
     .admin-item-info { flex: 1; overflow: hidden; }
-    .admin-item-info strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.9rem; }
     .admin-item-actions { display: flex; gap: 6px; }
-    .admin-item-actions button {
-      border: none;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: white;
-    }
+    .admin-item-actions button { border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; color: white; }
     .btn-edit { background: var(--warning); }
     .btn-delete { background: var(--danger); }
 
-    .file-uploader {
-      position: relative;
-      background: var(--card-inner);
-      border: 2px dashed var(--border-color);
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .file-uploader input[type="file"] {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
+    .file-uploader { position: relative; background: var(--card-inner); border: 2px dashed var(--border-color); padding: 16px; border-radius: 12px; text-align: center; cursor: pointer; }
+    .file-uploader input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
     .empty-state { text-align: center; padding: 25px; color: var(--text-muted); }
-
-    /* ক্যাশ মেমো প্রিন্ট */
-    #invoiceArea { background: #fff; color: #000; padding: 20px; border-radius: 12px; }
-    #invoiceArea table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    #invoiceArea th, #invoiceArea td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 13px; }
-    #invoiceArea th { background: #f2f2f2; }
-
-    @media print {
-      body * { visibility: hidden; }
-      #invoiceModal, #invoiceModal * { visibility: visible; }
-      #invoiceModal { position: absolute; left: 0; top: 0; width: 100%; background: #fff; }
-      .no-print { display: none !important; }
-    }
   </style>
 </head>
 <body>
 
-<!-- নোটিফিকেশন টোস্ট -->
 <div id="toast-container"></div>
-
-<!-- ===== পেজসমূহ ===== -->
 
 <!-- হোম পেজ -->
 <div id="homePage" class="page active">
   <div class="app-header">
-    <div class="brand-title">
-      <i class="fas fa-bolt"></i> GADGET <span>SPOT</span>
-    </div>
-    <div class="header-icons">
-      <i class="fas fa-user-circle" onclick="navigateTo('profilePage')" title="প্রোফাইল/অ্যাডমিন"></i>
-    </div>
+    <div class="brand-title"><i class="fas fa-bolt"></i> GADGET <span>SPOT</span></div>
+    <div class="header-icons"><i class="fas fa-user-circle" onclick="navigateTo('profilePage')"></i></div>
   </div>
 
-  <!-- ব্যানার স্লাইডার -->
   <div class="slider-container" id="sliderContainer">
-    <div id="slidesWrapper">
-      <div class="slide active">
-        <div class="empty-state"><p>কোন ব্যানার আপলোড করা হয়নি</p></div>
-      </div>
-    </div>
+    <div id="slidesWrapper"><div class="slide active"><div class="empty-state"><p>কোন ব্যানার নেই</p></div></div></div>
     <button class="slider-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
     <button class="slider-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
   </div>
 
-  <!-- নোটিশ -->
-  <div class="notice-box">
-    <i class="fas fa-bullhorn"></i> <span id="noticeText">স্বাগতম GADGET SPOT-এ!</span>
-  </div>
-
-  <div class="section-title"><i class="fas fa-fire" style="color:var(--danger);"></i> সাম্প্রতিক গ্যাজেটসমূহ</div>
+  <div class="notice-box"><i class="fas fa-bullhorn"></i> <span id="noticeText">স্বাগতম GADGET SPOT-এ!</span></div>
+  <div class="section-title"><i class="fas fa-fire" style="color:var(--danger);"></i> বিশেষ অফার ও সাম্প্রতিক গ্যাজেট</div>
   <div id="homeProducts" class="product-grid"></div>
 </div>
 
 <!-- প্রোডাক্ট পেজ -->
 <div id="productPage" class="page">
   <div class="app-header">
-    <div class="brand-title">
-      <i class="fas fa-boxes-stacked"></i> গ্যাজেট <span>কালেকশন</span>
-    </div>
+    <div class="brand-title"><i class="fas fa-boxes-stacked"></i> গ্যাজেট <span>কালেকশন</span></div>
     <div class="header-icons">
       <i class="fas fa-shopping-cart" onclick="navigateTo('cartPage')" style="position:relative;">
         <span id="cartCount" style="position:absolute; top:-8px; right:-10px; background:var(--danger); color:white; border-radius:50%; padding:2px 6px; font-size:0.65rem;">0</span>
@@ -515,9 +181,7 @@
 <!-- কার্ট পেজ -->
 <div id="cartPage" class="page">
   <div class="app-header">
-    <div class="brand-title">
-      <i class="fas fa-cart-shopping"></i> মাই <span>কার্ট</span>
-    </div>
+    <div class="brand-title"><i class="fas fa-cart-shopping"></i> মাই <span>কার্ট</span></div>
     <i class="fas fa-arrow-left" onclick="navigateTo('productPage')"></i>
   </div>
   <div id="cartList"></div>
@@ -525,7 +189,6 @@
   
   <div class="order-form">
     <h4 style="margin-bottom:12px; color:var(--primary);"><i class="fas fa-truck"></i> ডেলিভারি ইনফরমেশন</h4>
-    
     <div class="form-group"><label>আপনার নাম</label><input type="text" id="orderName" placeholder="পূর্ণ নাম"></div>
     <div class="form-group"><label>মোবাইল নম্বর</label><input type="tel" id="orderPhone" placeholder="017XXXXXXXX"></div>
     <div class="form-group">
@@ -536,35 +199,24 @@
       <label>জেলা সিলেক্ট করুন</label>
       <select id="districtSelect"><option value="">-- আগে বিভাগ নির্বাচন করুন --</option></select>
     </div>
-    <div class="form-group">
-      <label>বিস্তারিত ঠিকানা (বাড়ি/রোড/থানা)</label>
-      <textarea id="addressDetail" rows="2" placeholder="আপনার এলাকার সম্পূর্ণ ঠিকানা"></textarea>
-    </div>
-
+    <div class="form-group"><label>বিস্তারিত ঠিকানা</label><textarea id="addressDetail" rows="2" placeholder="আপনার এলাকার সম্পূর্ণ ঠিকানা"></textarea></div>
     <div style="background:var(--card-inner); padding:10px 14px; border-radius:10px; display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.9rem;">
-      <span>ডেলিভারি চার্জ</span>
-      <span id="deliveryChargeDisplay">৭০ টাকা</span>
+      <span>ডেলিভারি চার্জ</span><span id="deliveryChargeDisplay">৭০ টাকা</span>
     </div>
-
     <button class="btn" onclick="placeOrder()">অর্ডার নিশ্চিত করুন</button>
   </div>
 </div>
 
 <!-- প্রোফাইল ও অ্যাডমিন পেজ -->
 <div id="profilePage" class="page">
-  <div class="app-header">
-    <div class="brand-title">
-      <i class="fas fa-user-shield"></i> অ্যাডমিন <span>ড্যাশবোর্ড</span>
-    </div>
-  </div>
-
+  <div class="app-header"><div class="brand-title"><i class="fas fa-user-shield"></i> অ্যাডমিন <span>ড্যাশবোর্ড</span></div></div>
+  
   <div id="authSection">
-    <div class="admin-card" id="loginBox">
+    <div class="admin-card">
       <h3>অ্যাডমিন লগইন</h3><br>
       <div class="form-group"><input type="email" id="loginEmail" placeholder="ইমেইল"></div>
       <div class="form-group"><input type="password" id="loginPassword" placeholder="পাসওয়ার্ড"></div>
       <button class="btn" onclick="loginUser()">লগইন</button>
-      <p style="margin-top:10px; font-size:0.85rem; text-align:center; color:var(--text-muted);">ডিফল্ট অ্যাকাউন্ট: admin@shop.com / 123456</p>
     </div>
   </div>
 
@@ -575,11 +227,9 @@
       <button class="btn" style="background:var(--danger); margin-top:10px; padding:8px;" onclick="logoutUser()">লগআউট</button>
     </div>
 
-    <!-- অ্যাডমিন কন্ট্রোল প্যানেল -->
     <div id="adminPanel" style="display:none; margin-top:20px;">
       <h3 style="margin-bottom:12px; color:var(--primary);"><i class="fas fa-list-check"></i> অ্যাডমিন কন্ট্রোল প্যানেল</h3>
       
-      <!-- অ্যাডমিন নেভিগেশন ট্যাব (সঠিক ID যুক্ত) -->
       <div class="admin-nav">
         <button class="admin-nav-btn active" onclick="switchAdminTab('manageProdTab', this)"><i class="fas fa-box"></i> প্রোডাক্ট ম্যানেজ</button>
         <button class="admin-nav-btn" onclick="switchAdminTab('manageBannerTab', this)"><i class="fas fa-images"></i> ব্যানার ম্যানেজ</button>
@@ -587,23 +237,35 @@
         <button class="admin-nav-btn" onclick="switchAdminTab('viewOrdersTab', this)"><i class="fas fa-receipt"></i> অর্ডারসমূহ</button>
       </div>
 
-      <!-- ১. প্রোডাক্ট আপলোড ও ম্যানেজ ট্যাব -->
+      <!-- ১. প্রোডাক্ট আপলোড (সঠিক দামের অপশনসহ) -->
       <div id="manageProdTab" class="admin-tab-content active admin-card">
         <h4 id="prodFormTitle" style="margin-bottom:12px;">নতুন প্রোডাক্ট যুক্ত করুন</h4>
         <input type="hidden" id="editProdId" value="">
-        <div class="form-group"><label>প্রোডাক্ট নাম</label><input type="text" id="prodName"></div>
-        <div class="form-group"><label>মূল্য (টাকা)</label><input type="number" id="prodPrice"></div>
-        <div class="form-group"><label>ডিসকাউন্ট (%)</label><input type="number" id="prodDiscount"></div>
+        
+        <div class="form-group"><label>প্রোডাক্ট নাম</label><input type="text" id="prodName" placeholder="যেমন: Smart Watch"></div>
+        
+        <div class="form-group">
+          <label>পূর্বের দাম / রেগুলার প্রাইজ (টাকা)</label>
+          <input type="number" id="prodOriginalPrice" placeholder="যেমন: 8800">
+        </div>
+
+        <div class="form-group">
+          <label>অফার / ছাড়ের বিক্রয়মূল্য (টাকা)</label>
+          <input type="number" id="prodPrice" placeholder="যেমন: 8000">
+        </div>
+
         <div class="form-group"><label>বিবরণ</label><textarea id="prodDesc" rows="2"></textarea></div>
+        
         <div class="form-group">
           <label>ছবি নির্বাচন করুন</label>
           <div class="file-uploader">
             <i class="fas fa-cloud-arrow-up" style="font-size:1.5rem; color:var(--primary);"></i>
-            <p style="font-size:0.8rem;">গ্যালারি থেকে ছবি সিলেক্ট করুন</p>
-            <input type="file" id="prodImgFile" accept="image/*" onchange="previewImg(this, 'pPreview')">
+            <p style="font-size:0.8rem;">ছবি আপলোড করুন (স্বয়ংক্রিয় কম্প্রেস হবে)</p>
+            <input type="file" id="prodImgFile" accept="image/*" onchange="handleImageCompress(this, 'pPreview')">
           </div>
           <img id="pPreview" style="display:none; width:100%; height:120px; object-fit:cover; margin-top:8px; border-radius:10px;">
         </div>
+
         <button class="btn" id="saveProdBtn" onclick="adminSaveProduct()">প্রোডাক্ট সেভ করুন</button>
         <button class="btn" id="cancelEditProdBtn" style="display:none; background:var(--text-muted); margin-top:8px;" onclick="resetProdForm()">বাতিল করুন</button>
 
@@ -612,39 +274,33 @@
         <div id="adminProductList"></div>
       </div>
 
-      <!-- ২. ব্যানার আপলোড ও ম্যানেজ ট্যাব (সঠিক ID দেয়া হয়েছে) -->
+      <!-- ২. ব্যানার আপলোড -->
       <div id="manageBannerTab" class="admin-tab-content admin-card">
         <h4 style="margin-bottom:12px;">নতুন ব্যানার যুক্ত করুন</h4>
         <div class="form-group">
           <div class="file-uploader">
             <i class="fas fa-image" style="font-size:1.5rem; color:var(--primary);"></i>
-            <p style="font-size:0.8rem;">গ্যালারি থেকে ব্যানার সিলেক্ট করুন</p>
-            <input type="file" id="bannerImgFile" accept="image/*" onchange="previewImg(this, 'bPreview')">
+            <p style="font-size:0.8rem;">ব্যানার সিলেক্ট করুন</p>
+            <input type="file" id="bannerImgFile" accept="image/*" onchange="handleImageCompress(this, 'bPreview')">
           </div>
           <img id="bPreview" style="display:none; width:100%; height:120px; object-fit:cover; margin-top:8px; border-radius:10px;">
         </div>
         <button class="btn" onclick="adminAddBanner()">ব্যানার যুক্ত করুন</button>
-
         <hr style="border-color:var(--border-color); margin:20px 0;">
         <h4>বর্তমান ব্যানার তালিকা</h4><br>
         <div id="adminBannerList"></div>
       </div>
 
-      <!-- ৩. নোটিশ আপলোড ও ম্যানেজ ট্যাব -->
+      <!-- ৩. নোটিশ ম্যানেজমেন্ট -->
       <div id="manageNoticeTab" class="admin-tab-content admin-card">
         <h4 style="margin-bottom:12px;">নোটিশ ম্যানেজমেন্ট</h4>
-        <div class="form-group">
-          <label>নতুন নোটিশ টেক্সট</label>
-          <input type="text" id="noticeInput" placeholder="যেমন: নতুন সব গ্যাজেটে ১০% ছাড়!">
-        </div>
+        <div class="form-group"><input type="text" id="noticeInput" placeholder="যেমন: নতুন সব গ্যাজেটে স্পেশাল ছাড়!"></div>
         <button class="btn" onclick="adminUploadNotice()">প্রকাশ করুন</button>
-
         <hr style="border-color:var(--border-color); margin:20px 0;">
-        <h4>প্রকাশিত নোটিশ তালিকা</h4><br>
         <div id="adminNoticeList"></div>
       </div>
 
-      <!-- ৪. অর্ডার তালিকা ট্যাব -->
+      <!-- ৪. অর্ডারসমূহ -->
       <div id="viewOrdersTab" class="admin-tab-content admin-card">
         <h4>গ্রাহকদের অর্ডার তালিকা</h4><br>
         <div id="adminOrdersList"></div>
@@ -653,27 +309,18 @@
   </div>
 </div>
 
-<!-- প্রোডাক্ট ডিটেইলস মোডাল -->
+<!-- মোডাল -->
 <div id="productModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" onclick="closeModal('productModal')">&times;</span>
-    <img id="modalImg" src="" style="width:100%; height:180px; object-fit:contain; background:var(--card-inner); border-radius:12px; margin-bottom:10px;">
-    <h3 id="modalTitle"></h3>
-    <div id="modalPrice" style="font-size:1.2rem; color:var(--primary); font-weight:700; margin:4px 0;"></div>
+    <img id="modalImg" src="" style="width:100%; height:180px; object-fit:contain; background:var(--card-inner); border-radius:12px;">
+    <h3 id="modalTitle" style="margin-top:10px;"></h3>
+    <div id="modalPriceBox" class="price-box"></div>
     <p id="modalDesc" style="font-size:0.88rem; color:var(--text-muted); margin:8px 0;"></p>
     <div style="display:flex; gap:8px; margin-top:14px;">
       <button class="btn btn-add-cart" id="mAddBtn">কার্টে রাখুন</button>
       <button class="btn btn-buy-now" id="mBuyBtn">সরাসরি অর্ডার</button>
     </div>
-  </div>
-</div>
-
-<!-- মেমো প্রিন্ট মোডাল -->
-<div id="invoiceModal" class="modal">
-  <div class="modal-content" style="background:#fff; color:#000;">
-    <span class="close-modal no-print" onclick="closeModal('invoiceModal')" style="color:#000;">&times;</span>
-    <div id="invoiceArea"></div>
-    <button class="btn no-print" style="margin-top:15px; background:var(--primary);" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট / সেভ করুন</button>
   </div>
 </div>
 
@@ -686,19 +333,17 @@
 </div>
 
 <script>
-  // ---- জিও ডেটা ----
   const bdGeoData = {
-    "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "টাঙ্গাইল", "নরসিংদী", "ফরিদপুর", "মাদারীপুর", "মানিকগঞ্জ", "মুন্সিগঞ্জ", "রাজবাড়ী", "শরিয়তপুর", "গোপালগঞ্জ", "কিশোরগঞ্জ"],
-    "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "ফেনী", "ব্রাহ্মণবাড়িয়া", "নোয়াখালী", "চাঁদপুর", "লক্ষ্মীপুর", "রাঙ্গামাটি", "বান্দরবান", "খাগড়াছড়ি"],
-    "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "সিরাজগঞ্জ", "নাটোর", "নওগাঁ", "চাঁপাইনবাবগঞ্জ", "জয়পুরহাট"],
-    "খুলনা": ["খুলনা", "যশোর", "কুষ্টিয়া", "সাতক্ষীরা", "বাগেরহাট", "ঝিনাইদহ", "চুয়াডাঙ্গা", "মেহেরপুর", "নড়াইল", "মাগুরা"],
-    "বরিশাল": ["বরিশাল", "পটুয়াখালী", "ভোলা", "পিরোজপুর", "বরগুনা", "ঝালকাঠি"],
-    "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
-    "রংপুর": ["রংপুর", "দিনাজপুর", "গাইবান্ধা", "কুড়িগ্রাম", "লালমনিরহাট", "নীলফামারী", "পঞ্চগড়", "ঠাকুরগাঁও"],
-    "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "শেরপুর", "নেত্রকোণা"]
+    "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "টাঙ্গাইল", "ফরিদপুর"],
+    "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "নোয়াখালী"],
+    "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা"],
+    "খুলনা": ["খুলনা", "যশোর", "কুষ্টিয়া"],
+    "বরিশাল": ["বরিশাল", "পটুয়াখালী"],
+    "সিলেট": ["সিলেট", "মৌলভীবাজার"],
+    "রংপুর": ["রংপুর", "দিনাজপুর"],
+    "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর"]
   };
 
-  // ---- লোড ডেটা ----
   let products = JSON.parse(localStorage.getItem('gs_products')) || [];
   let banners = JSON.parse(localStorage.getItem('gs_banners')) || [];
   let notices = JSON.parse(localStorage.getItem('gs_notices')) || [];
@@ -708,27 +353,69 @@
 
   let currentSlide = 0;
   let slideInterval = null;
-
   const ADMIN_EMAIL = 'admin@shop.com';
   const ADMIN_PASS = '123456';
 
   function saveData() {
-    localStorage.setItem('gs_products', JSON.stringify(products));
-    localStorage.setItem('gs_banners', JSON.stringify(banners));
-    localStorage.setItem('gs_notices', JSON.stringify(notices));
-    localStorage.setItem('gs_orders', JSON.stringify(orders));
-    localStorage.setItem('gs_cart', JSON.stringify(cart));
-    if(currentUser) localStorage.setItem('gs_user', JSON.stringify(currentUser));
-    else localStorage.removeItem('gs_user');
+    try {
+      localStorage.setItem('gs_products', JSON.stringify(products));
+      localStorage.setItem('gs_banners', JSON.stringify(banners));
+      localStorage.setItem('gs_notices', JSON.stringify(notices));
+      localStorage.setItem('gs_orders', JSON.stringify(orders));
+      localStorage.setItem('gs_cart', JSON.stringify(cart));
+      if(currentUser) localStorage.setItem('gs_user', JSON.stringify(currentUser));
+      else localStorage.removeItem('gs_user');
+    } catch (e) {
+      showToast('⚠️ মেমোরি পূর্ণ হয়েছে! পুরোনো ছবি বা প্রোডাক্ট মুছুন।');
+    }
   }
 
   function showToast(msg) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `<i class="fas fa-circle-check"></i> ${msg}`;
+    toast.innerHTML = `<i class="fas fa-circle-info"></i> ${msg}`;
     container.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
+  }
+
+  /* 🛠️ ইমেজ সাইজ ছোট করার অটোমেটিক কম্প্রেস ফাংশন (এরর সমাধান) */
+  function handleImageCompress(input, targetImgId) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // ছবি সর্বোচ্চ ৮০০ পিক্সেল উইথ এ রিসাইজ হবে
+          const maxWidth = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (maxWidth * height) / width;
+            width = maxWidth;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // কম্প্রেসড Base64 ডাটা (Quality: 0.7)
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          
+          const previewImg = document.getElementById(targetImgId);
+          previewImg.src = compressedDataUrl;
+          previewImg.style.display = 'block';
+        };
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   function initGeoDropDown() {
@@ -767,14 +454,12 @@
 
   function renderBanners() {
     const wrapper = document.getElementById('slidesWrapper');
-    if (banners.length === 0) {
-      wrapper.innerHTML = `<div class="slide active"><div class="empty-state"><p>কোন ব্যানার আপলোড করা হয়নি</p></div></div>`;
+    if (!banners.length) {
+      wrapper.innerHTML = `<div class="slide active"><div class="empty-state"><p>কোন ব্যানার নেই</p></div></div>`;
       return;
     }
     wrapper.innerHTML = banners.map((b, i) => `
-      <div class="slide ${i === 0 ? 'active' : ''}">
-        <img src="${b}">
-      </div>
+      <div class="slide ${i === 0 ? 'active' : ''}"><img src="${b}"></div>
     `).join('');
 
     currentSlide = 0;
@@ -800,7 +485,7 @@
       container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>কোন গ্যাজেট যোগ করা হয়নি</p></div>`;
       return;
     }
-    container.innerHTML = products.slice(-4).reverse().map(p => productCardTemplate(p)).join('');
+    container.innerHTML = products.slice(-6).reverse().map(p => productCardTemplate(p)).join('');
   }
 
   function renderProducts() {
@@ -813,13 +498,22 @@
     updateCartCount();
   }
 
+  /* 🏷️ প্রোডাক্ট কার্ড টেমপ্লেট (মূল্য ছাড় স্পষ্ট দেখানোর জন্য) */
   function productCardTemplate(p) {
+    const origPrice = p.originalPrice || (p.price + 500); // আগের দাম
+    const discountAmount = origPrice - p.price; // ছাড়ের মোট টাকা
+
     return `
       <div class="product-card" onclick="openModal(${p.id})">
         <img src="${p.image}">
         <h4>${p.name}</h4>
-        <div class="price">${p.price} ৳</div>
-        ${p.discount > 0 ? `<div class="discount">-${p.discount}% ছাড়</div>` : ''}
+        
+        <div class="price-box">
+          ${origPrice > p.price ? `<span class="original-price">৳${origPrice}</span>` : ''}
+          <span class="current-price">৳${p.price}</span>
+          ${discountAmount > 0 ? `<span class="discount-tag">৳${discountAmount} ছাড়</span>` : ''}
+        </div>
+
         <div class="card-buttons" onclick="event.stopPropagation()">
           <button class="btn-add-cart" onclick="addToCart(${p.id})">কার্ট</button>
           <button class="btn-buy-now" onclick="buyNow(${p.id})">অর্ডার</button>
@@ -833,7 +527,16 @@
     if(!p) return;
     document.getElementById('modalImg').src = p.image;
     document.getElementById('modalTitle').innerText = p.name;
-    document.getElementById('modalPrice').innerText = `${p.price} ৳`;
+    
+    const origPrice = p.originalPrice || (p.price + 500);
+    const discountAmount = origPrice - p.price;
+
+    document.getElementById('modalPriceBox').innerHTML = `
+      ${origPrice > p.price ? `<span class="original-price">পূর্বের দাম: ৳${origPrice}</span>` : ''}
+      <span class="current-price">অফার মূল্য: ৳${p.price}</span>
+      ${discountAmount > 0 ? `<span class="discount-tag">বিশেষ ছাড়: ৳${discountAmount}</span>` : ''}
+    `;
+
     document.getElementById('modalDesc').innerText = p.desc || 'কোন বিবরণ নেই।';
     
     document.getElementById('mAddBtn').onclick = () => { addToCart(p.id); closeModal('productModal'); };
@@ -882,7 +585,7 @@
           <img src="${c.image}">
           <div class="details">
             <strong>${c.name}</strong>
-            <div style="font-size:0.8rem; color:var(--text-muted);">${c.price} ৳ × ${c.qty}</div>
+            <div style="font-size:0.85rem; color:var(--primary); font-weight:700;">৳${c.price} × ${c.qty}</div>
           </div>
           <div class="qty">
             <button onclick="changeQty(${c.id}, -1)">−</button>
@@ -898,7 +601,7 @@
     const charge = isDhaka ? 70 : 120;
     
     document.getElementById('deliveryChargeDisplay').innerText = `${charge} টাকা (${isDhaka ? 'ঢাকার ভেতরে' : 'ঢাকার বাইরে'})`;
-    document.getElementById('cartTotal').innerHTML = `সাবটোটাল: ${subtotal} ৳ + ডেলিভারি: ${charge} ৳ = <strong>${subtotal + charge} ৳</strong>`;
+    document.getElementById('cartTotal').innerHTML = `সাবটোটাল: ৳${subtotal} + ডেলিভারি: ৳${charge} = <strong>৳${subtotal + charge}</strong>`;
   }
 
   function changeQty(id, delta) {
@@ -922,7 +625,7 @@
     const address = document.getElementById('addressDetail').value;
 
     if(!name || !phone || !division || !district || !address) {
-      showToast('সবগুলো তথ্য পূরণ করুন!');
+      showToast('সবগুলো তথ্য বিবরণ দিন!');
       return;
     }
 
@@ -942,7 +645,7 @@
     saveData();
     updateCartCount();
     renderCart();
-    showToast('অর্ডার সম্পূর্ণ হয়েছে!');
+    showToast('অর্ডার সফল হয়েছে!');
     navigateTo('profilePage');
   }
 
@@ -955,11 +658,9 @@
       showToast('অ্যাডমিন ড্যাশবোর্ডে স্বাগতম');
       saveData();
       renderProfile();
-      return;
-    }
-    if(email) {
+    } else if(email) {
       currentUser = { name: 'ইউজার', email, role: 'user' };
-      showToast('লগইন সফল হয়েছে');
+      showToast('লগইন সফল');
       saveData();
       renderProfile();
     }
@@ -994,7 +695,6 @@
     }
   }
 
-  // সুইচ ট্যাব ফাংশন
   function switchAdminTab(tabId, btn) {
     document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
@@ -1006,29 +706,17 @@
     }
   }
 
-  function previewImg(input, imgId) {
-    const img = document.getElementById(imgId);
-    if(input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        img.src = e.target.result;
-        img.style.display = 'block';
-      }
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  // ---- অ্যাডমিন: প্রোডাক্ট সেভ ও এডিট ----
+  /* 🛒 অ্যাডমিন: প্রোডাক্ট সেভ করা (নতুন প্রাইস অপশনসহ) */
   function adminSaveProduct() {
     const editId = document.getElementById('editProdId').value;
     const name = document.getElementById('prodName').value;
+    const origPrice = parseFloat(document.getElementById('prodOriginalPrice').value) || 0;
     const price = parseFloat(document.getElementById('prodPrice').value);
-    const discount = parseFloat(document.getElementById('prodDiscount').value) || 0;
     const desc = document.getElementById('prodDesc').value;
     const imgElement = document.getElementById('pPreview');
 
     if(!name || !price || (imgElement.style.display === 'none' && !editId)) {
-      showToast('নাম, দাম এবং ছবি আবশ্যক!');
+      showToast('নাম, বিক্রয়মূল্য এবং ছবি অবশ্যই দিন!');
       return;
     }
 
@@ -1036,17 +724,24 @@
       const idx = products.findIndex(p => p.id == editId);
       if(idx > -1) {
         products[idx].name = name;
+        products[idx].originalPrice = origPrice;
         products[idx].price = price;
-        products[idx].discount = discount;
         products[idx].desc = desc;
         if(imgElement.style.display !== 'none') {
           products[idx].image = imgElement.src;
         }
-        showToast('প্রোডাক্ট আপডেট করা হয়েছে');
+        showToast('প্রোডাক্ট আপডেট হয়েছে');
       }
     } else {
-      products.push({ id: Date.now(), name, price, discount, desc, image: imgElement.src });
-      showToast('নতুন প্রোডাক্ট আপলোড হয়েছে');
+      products.push({
+        id: Date.now(),
+        name,
+        originalPrice: origPrice,
+        price,
+        desc,
+        image: imgElement.src
+      });
+      showToast('নতুন প্রোডাক্ট যুক্ত হয়েছে');
     }
 
     saveData();
@@ -1061,22 +756,20 @@
     
     document.getElementById('editProdId').value = p.id;
     document.getElementById('prodName').value = p.name;
+    document.getElementById('prodOriginalPrice').value = p.originalPrice || '';
     document.getElementById('prodPrice').value = p.price;
-    document.getElementById('prodDiscount').value = p.discount;
     document.getElementById('prodDesc').value = p.desc;
     
     document.getElementById('prodFormTitle').innerText = "প্রোডাক্ট তথ্য এডিট করুন";
     document.getElementById('saveProdBtn').innerText = "আপডেট করুন";
     document.getElementById('cancelEditProdBtn').style.display = "block";
-    
-    window.scrollTo({ top: 100, behavior: 'smooth' });
   }
 
   function resetProdForm() {
     document.getElementById('editProdId').value = '';
     document.getElementById('prodName').value = '';
+    document.getElementById('prodOriginalPrice').value = '';
     document.getElementById('prodPrice').value = '';
-    document.getElementById('prodDiscount').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('pPreview').style.display = 'none';
     
@@ -1086,12 +779,12 @@
   }
 
   function deleteProduct(id) {
-    if(confirm('আপনি কি এই প্রোডাক্টটি ডিলিট করতে চান?')) {
+    if(confirm('প্রোডাক্টটি ডিলিট করতে চান?')) {
       products = products.filter(p => p.id !== id);
       saveData();
       renderAdminProductsList();
       renderHome();
-      showToast('প্রোডাক্ট ডিলিট করা হয়েছে');
+      showToast('ডিলিট সম্পূর্ণ হয়েছে');
     }
   }
 
@@ -1106,7 +799,7 @@
         <img src="${p.image}">
         <div class="admin-item-info">
           <strong>${p.name}</strong>
-          <span style="font-size:0.8rem; color:var(--primary);">${p.price} ৳</span>
+          <span style="font-size:0.8rem; color:var(--primary);">অফার দাম: ৳${p.price}</span>
         </div>
         <div class="admin-item-actions">
           <button class="btn-edit" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button>
@@ -1116,7 +809,7 @@
     `).join('');
   }
 
-  // ---- অ্যাডমিন: ব্যানার ম্যানেজমেন্ট ----
+  /* 🖼️ অ্যাডমিন: ব্যানার যোগ করা */
   function adminAddBanner() {
     const imgElement = document.getElementById('bPreview');
     if(imgElement.style.display === 'none') {
@@ -1126,18 +819,18 @@
     banners.push(imgElement.src);
     saveData();
     imgElement.style.display = 'none';
-    showToast('নতুন ব্যানার যুক্ত করা হয়েছে');
+    showToast('ব্যানার যুক্ত হয়েছে');
     renderAdminBannersList();
     renderHome();
   }
 
   function deleteBanner(index) {
-    if(confirm('ব্যানারটি মুছে ফেলতে চান?')) {
+    if(confirm('ব্যানারটি মুছতে চান?')) {
       banners.splice(index, 1);
       saveData();
       renderAdminBannersList();
       renderHome();
-      showToast('ব্যানার মুছে ফেলা হয়েছে');
+      showToast('ব্যানার মোছা হয়েছে');
     }
   }
 
@@ -1150,17 +843,14 @@
     container.innerHTML = banners.map((b, i) => `
       <div class="admin-item-row">
         <img src="${b}" style="width:70px; height:40px;">
-        <div class="admin-item-info">
-          <strong>ব্যানার #${i + 1}</strong>
-        </div>
+        <div class="admin-item-info"><strong>ব্যানার #${i + 1}</strong></div>
         <div class="admin-item-actions">
-          <button class="btn-delete" onclick="deleteBanner(${i})"><i class="fas fa-trash"></i> ডিলিট</button>
+          <button class="btn-delete" onclick="deleteBanner(${i})"><i class="fas fa-trash"></i></button>
         </div>
       </div>
     `).join('');
   }
 
-  // ---- অ্যাডমিন: নোটিশ ম্যানেজমেন্ট ----
   function adminUploadNotice() {
     const text = document.getElementById('noticeInput').value;
     if(!text) return;
@@ -1172,16 +862,6 @@
     renderHome();
   }
 
-  function deleteNotice(index) {
-    if(confirm('নোটিশটি ডিলিট করতে চান?')) {
-      notices.splice(index, 1);
-      saveData();
-      renderAdminNoticesList();
-      renderHome();
-      showToast('নোটিশ ডিলিট করা হয়েছে');
-    }
-  }
-
   function renderAdminNoticesList() {
     const container = document.getElementById('adminNoticeList');
     if(!notices.length) {
@@ -1190,17 +870,14 @@
     }
     container.innerHTML = notices.map((n, i) => `
       <div class="admin-item-row">
-        <div class="admin-item-info">
-          <strong>${n}</strong>
-        </div>
+        <div class="admin-item-info"><strong>${n}</strong></div>
         <div class="admin-item-actions">
-          <button class="btn-delete" onclick="deleteNotice(${i})"><i class="fas fa-trash"></i></button>
+          <button class="btn-delete" onclick="notices.splice(${i},1); saveData(); renderAdminNoticesList(); renderHome();"><i class="fas fa-trash"></i></button>
         </div>
       </div>
     `).join('');
   }
 
-  // ---- অর্ডার তালিকা ও ইনভয়েস ----
   function renderAdminOrders() {
     const container = document.getElementById('adminOrdersList');
     if(!orders.length) {
@@ -1210,76 +887,16 @@
     container.innerHTML = orders.map(o => `
       <div style="background:var(--card-inner); padding:12px; border-radius:12px; margin-bottom:10px; border:1px solid var(--border-color);">
         <strong>অর্ডার ID: #${o.id}</strong><br>
-        <span style="font-size:0.85rem; color:var(--text-muted);">কাস্টমার: ${o.customer.name} (${o.customer.phone})</span><br>
-        <span style="font-size:0.85rem; color:var(--text-muted);">ঠিকানা: ${o.customer.address}, ${o.customer.district}, ${o.customer.division}</span>
+        <span style="font-size:0.85rem;">গ্রাহক: ${o.customer.name} (${o.customer.phone})</span><br>
+        <span style="font-size:0.85rem;">ঠিকানা: ${o.customer.address}, ${o.customer.district}</span>
         <hr style="border-color:var(--border-color); margin:8px 0;">
-        <div style="font-size:0.85rem; margin-bottom:8px;">
+        <div style="font-size:0.85rem;">
           ${o.items.map(i => `<div>- ${i.name} (${i.qty} টি)</div>`).join('')}
         </div>
-        <button class="btn" style="background:var(--primary); padding:8px; font-size:0.8rem;" onclick="printInvoice(${o.id})">
-          <i class="fas fa-print"></i> ক্যাশ মেমো প্রিন্ট / ডাউনলোড
-        </button>
       </div>
     `).join('');
   }
 
-  function printInvoice(orderId) {
-    const order = orders.find(o => o.id === orderId);
-    if(!order) return;
-
-    let itemsTotal = 0;
-    const itemsTable = order.items.map(i => {
-      const lineTotal = i.price * i.qty;
-      itemsTotal += lineTotal;
-      return `
-        <tr>
-          <td>${i.name}</td>
-          <td>${i.qty}</td>
-          <td>${i.price} ৳</td>
-          <td>${lineTotal} ৳</td>
-        </tr>
-      `;
-    }).join('');
-
-    const grandTotal = itemsTotal + (order.deliveryCharge || 70);
-
-    const invoiceHTML = `
-      <div style="text-align:center; margin-bottom:15px; border-bottom:2px solid #333; padding-bottom:10px;">
-        <h2 style="color:#2563eb; margin:0; font-family:'Poppins', sans-serif;">GADGET SPOT</h2>
-        <p style="margin:2px; font-size:12px; color:#555;">প্রিমিয়াম গ্যাজেট শপ</p>
-        <p style="margin:2px; font-size:12px;">তারিখ: ${order.date}</p>
-      </div>
-      <div style="font-size:13px; margin-bottom:15px;">
-        <strong>ইনভয়েস ID:</strong> #${order.id}<br>
-        <strong>গ্রাহকের নাম:</strong> ${order.customer.name}<br>
-        <strong>ফোন নম্বর:</strong> ${order.customer.phone}<br>
-        <strong>ঠিকানা:</strong> ${order.customer.address}, ${order.customer.district}, ${order.customer.division}
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>প্রোডাক্ট</th>
-            <th>পরিমাণ</th>
-            <th>মূল্য</th>
-            <th>মোট</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${itemsTable}
-        </tbody>
-      </table>
-      <div style="text-align:right; margin-top:15px; font-size:13px;">
-        <p>সাবটোটাল: <strong>${itemsTotal} ৳</strong></p>
-        <p>ডেলিভারি চার্জ: <strong>${order.deliveryCharge || 70} ৳</strong></p>
-        <h3 style="color:#2563eb; margin-top:5px;">সর্বমোট: ${grandTotal} ৳</h3>
-      </div>
-    `;
-
-    document.getElementById('invoiceArea').innerHTML = invoiceHTML;
-    document.getElementById('invoiceModal').classList.add('active');
-  }
-
-  // ---- ইনিশিয়ালাইজেশন ----
   initGeoDropDown();
   renderHome();
   updateCartCount();
